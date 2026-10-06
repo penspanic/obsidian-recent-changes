@@ -1,0 +1,11 @@
+import assert from 'node:assert/strict';
+import { readFile, stat } from 'node:fs/promises';
+const json = async (path) => JSON.parse(await readFile(path, 'utf8'));
+const manifest = await json('manifest.json');
+assert.match(manifest.version, /^\d+\.\d+\.\d+$/);
+assert.equal((await json('package.json')).version, manifest.version);
+assert.equal((await json('versions.json'))[manifest.version], manifest.minAppVersion);
+assert.deepEqual(await json('dist/manifest.json'), manifest);
+if (process.env.RELEASE_TAG) assert.equal(process.env.RELEASE_TAG, manifest.version);
+for (const file of ['main.js', 'manifest.json', 'styles.css']) assert.ok((await stat(`dist/${file}`)).size > 0);
+console.log(`Release assets verified: ${manifest.version}`);

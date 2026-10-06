@@ -1,0 +1,86 @@
+.recent-changes-view { padding: 0 !important; }
+.rc-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: var(--size-4-2) var(--size-4-3);
+}
+.rc-top { position: sticky; top: 0; z-index: 1; background: var(--background-secondary); }
+.rc-tabs { display: flex; gap: var(--size-2-1); }
+.rc-tab {
+  background: transparent; box-shadow: none; border: 0;
+  height: auto; padding: var(--size-2-1) var(--size-4-2);
+  font-size: var(--font-ui-small); color: var(--text-muted);
+  border-radius: var(--radius-s); cursor: var(--cursor);
+}
+.rc-tab:hover { background: var(--background-modifier-hover); }
+.rc-tab.is-active { color: var(--text-normal); background: var(--background-modifier-active-hover); }
+.rc-ranges {
+  display: flex; align-items: center; flex-wrap: wrap; gap: var(--size-2-1);
+  padding: 0 var(--size-4-3) var(--size-4-2);
+}
+.rc-range {
+  background: transparent; box-shadow: none;
+  border: 1px solid var(--background-modifier-border);
+  height: auto; padding: 1px 6px;
+  font-size: var(--font-ui-smaller); color: var(--text-muted);
+  border-radius: 10px; cursor: var(--cursor);
+}
+.rc-range:hover { background: var(--background-modifier-hover); }
+.rc-range.is-active {
+  color: var(--text-on-accent); background: var(--interactive-accent);
+  border-color: var(--interactive-accent);
+}
+.rc-total { margin-left: auto; font-size: var(--font-ui-smaller); color: var(--text-faint); }
+.rc-list { padding: 0 var(--size-4-2) var(--size-4-4); }
+.rc-group {
+  padding: var(--size-4-3) var(--size-4-2) var(--size-2-2);
+  font-size: var(--font-ui-smaller); font-weight: var(--font-semibold);
+  color: var(--text-faint);
+}
+.rc-file, .rc-folder {
+  display: flex; align-items: center; gap: var(--size-4-2);
+  padding: var(--size-2-2) var(--size-4-2);
+  border-radius: var(--radius-s);
+  font-size: var(--nav-item-size); color: var(--nav-item-color);
+  cursor: var(--cursor);
+}
+.rc-file:hover, .rc-folder:hover { background: var(--nav-item-background-hover); color: var(--nav-item-color-hover); }
+.rc-file.is-active { background: var(--nav-item-background-active); color: var(--nav-item-color-active); }
+.rc-file.rc-nested { padding-left: calc(var(--size-4-2) + 18px); }
+.rc-file-main { flex: 1; min-width: 0; }
+.rc-file-name, .rc-file-folder, .rc-folder-name {
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.rc-file-folder { font-size: var(--font-ui-smaller); color: var(--text-faint); }
+.rc-ext {
+  margin-left: var(--size-2-3); font-size: 9px; text-transform: uppercase;
+  color: var(--text-faint); letter-spacing: 0.05em;
+}
+.rc-time { flex: none; font-size: var(--font-ui-smaller); color: var(--text-faint); font-variant-numeric: tabular-nums; }
+.rc-folder { margin-top: var(--size-2-3); font-weight: var(--font-medium); color: var(--text-normal); }
+.rc-folder-name { flex: 1; min-width: 0; }
+.rc-folder-parent {
+  margin-left: var(--size-4-2); font-size: var(--font-ui-smaller);
+  color: var(--text-faint); font-weight: var(--font-normal);
+}
+.rc-count {
+  flex: none; font-size: var(--font-ui-smaller); color: var(--text-faint);
+  background: var(--background-modifier-hover); border-radius: 8px; padding: 0 6px;
+}
+.rc-chevron { flex: none; display: flex; color: var(--text-faint); }
+.rc-chevron svg { width: 14px; height: 14px; transition: transform 100ms; }
+.rc-folder.is-collapsed .rc-chevron svg { transform: rotate(-90deg); }
+.rc-empty { padding: var(--size-4-4); color: var(--text-faint); font-size: var(--font-ui-small); }
+
+/* Native buttons retain the compact file explorer appearance and keyboard semantics. */
+.recent-changes-view .rc-file,
+.recent-changes-view .rc-folder {
+  width: 100%; height: auto; text-align: left;
+  background: transparent; box-shadow: none; border: 0;
+  white-space: normal;
+}
+.recent-changes-view .rc-file:hover,
+.recent-changes-view .rc-folder:hover { background: var(--nav-item-background-hover); }
+.recent-changes-view .rc-file.is-active { background: var(--nav-item-background-active); }
+.recent-changes-view button:focus-visible { outline: 2px solid var(--interactive-accent); outline-offset: -2px; }
+.recent-changes-view .rc-refresh { background: transparent; border: 0; box-shadow: none; height: auto; }
+.rc-exclude-input { width: 100%; }

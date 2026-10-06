@@ -1,0 +1,39 @@
+{
+  "name": "obsidian-recent-changes",
+  "version": "0.3.0",
+  "description": "A compact sidebar for recently modified files and folders in Obsidian.",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "author": "penspanic",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/penspanic/obsidian-recent-changes.git"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "node esbuild.config.mjs --watch",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src tests --max-warnings 0",
+    "test": "vitest run",
+    "build": "npm run typecheck && node esbuild.config.mjs",
+    "check": "npm run lint && npm run test && npm run build",
+    "verify:release": "node scripts/verify-release.mjs"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.17",
+    "esbuild": "^0.28.2",
+    "eslint": "^9.39.4",
+    "eslint-plugin-obsidianmd": "^0.4.0",
+    "jsdom": "^26.1.0",
+    "obsidian": "1.13.1",
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.59.1",
+    "vitest": "^4.1.11"
+  },
+  "overrides": {
+    "moment": "^2.31.0"
+  }
+}
