@@ -19,6 +19,8 @@ The workflow rejects a tag that does not match the manifest version. Release ass
 
 GitHub publication and community-directory listing are separate steps. The [Recent Changes listing](https://community.obsidian.md/plugins/recent-changes) was submitted and published on 2026-10-06 under `penspanic`. Its 0.3.1 review completed with a Satisfactory result and the Add to Obsidian link is available. Build verification reproduced the release JavaScript byte-for-byte; dependency, network, and obfuscation checks passed.
 
+An active web listing is not proof that the app's catalog already includes the plugin. On 2026-10-06 the owner reported that Add to Obsidian only opened search with no matching entry; the official GitHub community-plugins.json export also did not contain recent-changes. Until the app shows the entry, direct users to BRAT or manual installation. Do not promise a propagation time or describe the web link as bypassing catalog availability.
+
 For listing maintenance:
 
 1. Check the current [developer policies](https://docs.obsidian.md/community-directory/developer-policies) and [submission requirements](https://docs.obsidian.md/community-directory/submission-requirements-for-plugins).

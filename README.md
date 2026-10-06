@@ -16,7 +16,7 @@ Pick a time range, switch between files and folders, and return to the work that
 
 ## Installation
 
-Requires **desktop Obsidian 1.7.2 or newer**. Install from the [official community listing](https://community.obsidian.md/plugins/recent-changes), through BRAT, or using the release files below.
+Requires **desktop Obsidian 1.7.2 or newer**. The [community listing](https://community.obsidian.md/plugins/recent-changes) is published and its automated review is complete. If Recent Changes is not yet visible in your app's plugin browser, install through **BRAT** or use the release files below.
 
 ### Obsidian community plugins
 
@@ -24,7 +24,7 @@ Requires **desktop Obsidian 1.7.2 or newer**. Install from the [official communi
 2. Search for **Recent Changes**, then select **Install**.
 3. Enable the plugin and click the history ribbon icon or run **Recent Changes: Open view**.
 
-You can also use **Add to Obsidian** on the [community listing](https://community.obsidian.md/plugins/recent-changes) to open the installer directly.
+The listing's **Add to Obsidian** link opens the app's plugin browser. It does not bypass the app's catalog: if the plugin is missing from search results, use BRAT or manual installation instead.
 
 ### BRAT
 
