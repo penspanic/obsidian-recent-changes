@@ -1,6 +1,6 @@
 {
   "name": "obsidian-recent-changes",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "A compact sidebar for recently modified files and folders in Obsidian.",
   "private": true,
   "type": "module",

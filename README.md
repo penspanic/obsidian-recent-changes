@@ -1,9 +1,3 @@
----
-type: documentation
-date: 2026-10-06
-tags: [obsidian, recent-changes]
----
-
 # Recent Changes
 
 A compact Obsidian sidebar for finding recently modified files and folders.
@@ -20,29 +14,33 @@ Pick a time range, switch between files and folders, and return to the work that
 - Keyboard navigation and native file context menus.
 - No runtime network requests, telemetry, accounts, or other plugin dependencies.
 
-## Status
-
-Version **0.3.0** is a private review build. This project has not been submitted to the Obsidian community directory. The source and release assets remain private until the owner chooses to publish them.
-
-The API declaration supports mobile, but device testing on iOS and Android is still pending. Automated integration tests use a simulated Obsidian host; they do not replace testing in the desktop app. See [validation](docs/VALIDATION.md).
-
 ## Installation
 
-### Review build / manual installation
+Requires **desktop Obsidian 1.7.2 or newer**. Recent Changes is not yet listed in Obsidian's community plugin directory. Install through BRAT or download the release files below.
 
-1. While signed in to GitHub with repository access, download `main.js`, `manifest.json`, and `styles.css` from the [release page](https://github.com/penspanic/obsidian-recent-changes/releases). A draft release is visible to users with appropriate repository permissions.
+### BRAT (recommended)
+
+1. Install and enable **BRAT** from Settings → Community plugins → Browse.
+2. Open the command palette and run **BRAT: Add a beta plugin for testing**.
+3. Paste `https://github.com/penspanic/obsidian-recent-changes` and select **Add Plugin**.
+4. Enable **Recent Changes** in Settings → Community plugins.
+5. Click the history ribbon icon or run **Recent Changes: Open view**.
+
+BRAT also manages updates from GitHub releases. See the [BRAT quick guide](https://tfthacker.com/brat-quick-guide) for update options.
+
+### Manual installation
+
+1. Download `main.js`, `manifest.json`, and `styles.css` from the [latest release](https://github.com/penspanic/obsidian-recent-changes/releases/latest). Use the individual release assets, not the source-code ZIP.
 2. Create `<vault>/<config-dir>/plugins/recent-changes/`. The default config directory is `.obsidian`.
-3. Put the three files in that folder. Do not copy `src/`, `node_modules/`, or someone else's `data.json`.
+3. Put the three downloaded files in that folder.
 4. Restart Obsidian, allow community plugins, and enable **Recent Changes** under Settings → Community plugins.
 5. Click the history ribbon icon or run **Recent Changes: Open view**.
 
-You can also build the files locally with the development instructions below.
+For manual updates, disable the plugin, replace those same three files with the latest release assets, and enable it again. Keep your existing `data.json`; it stores your per-vault settings.
 
-### After public release
+### Compatibility
 
-Before community-directory approval, [BRAT](https://github.com/TfTHacker/obsidian42-brat) can install a published GitHub release by repository URL. Private repositories require authenticated access; pasting a private URL alone does not make it accessible.
-
-After approval, install through Obsidian's community plugin browser.
+The desktop plugin has been smoke-tested on macOS with Obsidian 1.13.7. Mobile support is not enabled in this release. See [validation](docs/VALIDATION.md) for tested behavior and remaining device checks.
 
 ## Usage
 
@@ -83,6 +81,11 @@ Time ranges are rolling durations; `1m` means 30 days. Today/Yesterday headings 
 Requires Node.js 22 or newer and npm.
 
 ```sh
+git clone https://github.com/penspanic/obsidian-recent-changes.git
+cd obsidian-recent-changes
+```
+
+```sh
 npm ci
 npm run check
 npm run verify:release
@@ -94,9 +97,13 @@ The installable files are in `dist/`. Only source files are committed; builds an
 npm run dev
 ```
 
-Watch mode rebuilds JavaScript. After changing `styles.css` or `manifest.json`, restart the watcher to recopy those assets. Copy the three `dist/` files into a test vault's plugin directory and reload the plugin. Running a build does not modify your installed plugin.
+Watch mode rebuilds JavaScript. After changing `styles.css` or `manifest.json`, restart the watcher to recopy those assets. Copy the three `dist/` files into a test vault's plugin directory and reload the plugin. A build writes only to `dist/`. If your local plugin files are linked to `dist/`, reloading the plugin applies that build.
 
 See [contributing](CONTRIBUTING.md), [release steps](docs/RELEASING.md), and [validation](docs/VALIDATION.md).
+
+## Support and contributing
+
+Report bugs or suggest improvements in [GitHub Issues](https://github.com/penspanic/obsidian-recent-changes/issues). Include your Obsidian version, operating system, and steps to reproduce. For code contributions, see [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## License
 

@@ -1,28 +1,38 @@
----
-type: documentation
-date: 2026-10-06
-tags: [obsidian, recent-changes]
----
-
 # Validation
 
-## Automated
+## Automated checks
 
 Run `npm run check` and `npm run verify:release`.
 
+The initial implementation passed the official Obsidian ESLint rules, strict TypeScript, 28 tests, the production build, and release metadata checks on macOS and GitHub's Ubuntu/Node 22 runner. Checks run again for every main-branch update, pull request, and release tag.
+
 Tests cover malformed and legacy settings, isolated mutable defaults, extension and exclusion behavior, timestamp ordering, exact range cutoffs, display counts, folder grouping, cache invalidation, hidden-pane refresh, stale file entries, serialized saves, active-file highlighting, keyboard navigation, collapse state, focus retention, and the public file-menu event.
 
-Integration tests run with jsdom and a small Obsidian adapter. They check interaction and lifecycle contracts, not the real Obsidian renderer. The build bundles no runtime dependencies; `obsidian` is provided by the host app.
+Integration tests use jsdom and a simulated Obsidian adapter. The production bundle has no runtime dependencies other than the Obsidian API provided by the app.
 
-## Device checks before public release
+## Desktop smoke test — 2026-10-06
 
-- [ ] Desktop Obsidian: enable/disable/re-enable the plugin; open and restore the sidebar.
-- [ ] Switch every time range and file/folder mode; check empty and capped results.
-- [ ] Create, edit, rename, and delete a synthetic file outside the app; check that detection updates the list.
-- [ ] Verify keyboard navigation, new-tab actions, right-click menu, folder collapse, and focus retention.
-- [ ] Check light/dark themes, narrow panes, and a popout window.
-- [ ] Upgrade a test copy of 0.2.1 with personalized `data.json`; confirm filters remain intact.
-- [ ] Validate a large synthetic vault and check idle CPU usage.
-- [ ] Check iOS and Android layout, touch actions, and sidebar restoration.
+Tested on macOS with **Obsidian 1.13.7**:
 
-Device checks are pending unless a result is explicitly recorded below. The existing personal-vault plugin is not automatically replaced by this project.
+- Reloaded the app with the TypeScript build installed; the sidebar loaded successfully.
+- Switched between file and folder modes.
+- Changed the rolling range from 6 hours to 1 hour and back; the visible list narrowed and expanded.
+- Used Tab and Space to activate a range button.
+- Opened a file from the sidebar.
+- Upgraded the local 0.2.1 installation while preserving extension filters, excluded paths, the file limit, and collapsed folders.
+- Restored the original view mode, range, and document after the smoke test.
+
+The owner subsequently reported that the plugin appeared to work. This is a desktop smoke test, not completion of the full matrix below.
+
+## Remaining coverage
+
+- [ ] Disable/re-enable the plugin and restore a saved sidebar across sessions.
+- [ ] Exercise every time range, empty results, and display caps in the real app.
+- [ ] Create, edit, rename, and delete synthetic files outside the app.
+- [ ] Verify all list keyboard controls, new-tab actions, right-click menus, folder collapse, and focus retention in the real app.
+- [ ] Check light/dark themes, narrow panes, and popout windows.
+- [ ] Validate a large synthetic vault and idle CPU usage.
+- [ ] Smoke-test Windows and Linux.
+- [ ] Test iOS and Android before enabling mobile support.
+
+The public release is desktop-only. Mobile is not advertised as supported until device validation is recorded.

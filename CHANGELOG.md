@@ -1,14 +1,17 @@
----
-type: documentation
-date: 2026-10-06
-tags: [obsidian, recent-changes]
----
-
 # Changelog
+
+## 0.3.1 — 2026-10-06
+
+First public release.
+
+- Document BRAT installation, manual installation and updates, local builds, and contribution/support paths.
+- Remove vault-specific metadata tables from project documentation.
+- Record the completed macOS desktop smoke test and limit this release to desktop until mobile validation is available.
+- Update CI actions to supported runtimes and generate release notes for the tagged version.
 
 ## 0.3.0 — 2026-10-06
 
-Private review build based on the author's local 0.2.1 plugin.
+Initial TypeScript implementation based on the local 0.2.1 plugin.
 
 - Move the implementation to strict TypeScript with separate model, view, settings, and lifecycle modules.
 - Keep time filters, file/folder modes, extension exclusions, relative times, and new-tab actions.

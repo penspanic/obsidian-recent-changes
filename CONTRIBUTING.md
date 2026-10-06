@@ -1,9 +1,3 @@
----
-type: documentation
-date: 2026-10-06
-tags: [obsidian, recent-changes]
----
-
 # Contributing
 
 Recent Changes focuses on fast navigation through recent modifications in a compact sidebar. Keep new features consistent with that scope.
