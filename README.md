@@ -16,7 +16,11 @@ Pick a time range, switch between files and folders, and return to the work that
 
 ## Installation
 
-Requires **desktop Obsidian 1.7.2 or newer**. Recent Changes is not yet listed in Obsidian's community plugin directory. Install through BRAT or download the release files below.
+Requires **desktop Obsidian 1.7.2 or newer**. The [community listing](https://community.obsidian.md/plugins/recent-changes) is published. Its initial automated review must finish before installation through the official directory becomes available. BRAT and manual installation work in the meantime.
+
+### Obsidian community plugins
+
+Once the listing's **Add to Obsidian** button is available, use it to open the installer. You can also find **Recent Changes** in Settings → Community plugins → Browse, then install and enable it.
 
 ### BRAT (recommended)
 

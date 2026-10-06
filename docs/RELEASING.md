@@ -17,12 +17,12 @@ The workflow rejects a tag that does not match the manifest version. Release ass
 
 ## Community-directory submission
 
-GitHub publication and community-directory listing are separate steps. The plugin is currently public on GitHub and is **not yet listed** in Obsidian's directory. Do not tell users to search for it there until it has been approved.
+GitHub publication and community-directory listing are separate steps. The [Recent Changes listing](https://community.obsidian.md/plugins/recent-changes) was submitted and published on 2026-10-06 under `penspanic`. The initial automated review was pending at publication; directory installation becomes available after the review requirements are satisfied.
 
-When the owner requests submission:
+For listing maintenance:
 
 1. Check the current [developer policies](https://docs.obsidian.md/community-directory/developer-policies) and [submission requirements](https://docs.obsidian.md/community-directory/submission-requirements-for-plugins).
-2. Confirm the plugin ID is available and keep `isDesktopOnly` aligned with tested support. The current public release is desktop-only.
-3. Follow the [official submission guide](https://docs.obsidian.md/Plugins/Releasing/Submit%20your%20plugin): sign in at [community.obsidian.md](https://community.obsidian.md), connect GitHub, add the plugin, and address review feedback.
+2. Keep the existing `recent-changes` ID and keep `isDesktopOnly` aligned with tested support. The current public release is desktop-only.
+3. Sign in at [community.obsidian.md](https://community.obsidian.md), open Plugins → Recent Changes, and address review feedback. Publish a new version when changing release assets; documentation-only changes do not require a new plugin version. Follow the [official submission guide](https://docs.obsidian.md/Plugins/Releasing/Submit%20your%20plugin) for the current review workflow.
 
 The manifest on the default branch and the GitHub release tag must agree. After initial approval, users can install and update through Obsidian's community plugin browser.
