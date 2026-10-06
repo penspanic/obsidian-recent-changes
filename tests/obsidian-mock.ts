@@ -61,11 +61,25 @@ export class TFile {
     this.stat = { mtime };
   }
 }
+class MenuItem {
+  title = '';
+  action?: () => unknown;
+  setTitle(title: string): this { this.title = title; return this; }
+  setIcon(): this { return this; }
+  onClick(action: () => unknown): this { this.action = action; return this; }
+}
 export class Menu {
-  addItem = vi.fn().mockReturnThis();
+  static instances: Menu[] = [];
+  items: MenuItem[] = [];
+  constructor() { Menu.instances.push(this); }
+  addItem(callback: (item: MenuItem) => unknown): this {
+    const item = new MenuItem(); callback(item); this.items.push(item); return this;
+  }
+  addSeparator(): this { return this; }
   showAtMouseEvent = vi.fn();
   showAtPosition = vi.fn();
 }
+export class Notice { constructor(_message: string) {} }
 export function setIcon(el: HTMLElement, icon: string): void { el.dataset.icon = icon; }
 export function debounce(callback: () => void, delay: number): (() => void) & { cancel: () => void } {
   let timer: number | undefined;

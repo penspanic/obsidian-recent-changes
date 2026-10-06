@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.4.0 — 2026-10-06
+
+- Exclude a selected file or folder directly from the Recent Changes context menu.
+- Exclude a file's parent folder without switching to folder view.
+- Match sidebar exclusions by exact vault path so same-named items in other folders stay visible.
+- Restore excluded items from Settings → Recent Changes → Excluded items → Remove.
+- Preserve existing manual exclusion rules and recover the visible list if saving an exclusion fails.
+
 ## 0.3.1 — 2026-10-06
 
 First public release.

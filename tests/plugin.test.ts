@@ -2,7 +2,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import type { App, PluginManifest, WorkspaceLeaf } from 'obsidian';
 import RecentChangesPlugin from '../src/main';
 import { RecentChangesView } from '../src/view';
-import { TFile } from './obsidian-mock';
+import { Menu, TFile } from './obsidian-mock';
 
 function setup() {
   const files = [new TFile('Project/one.md', Date.now()), new TFile('Other/two.md', Date.now() - 1000)];
@@ -29,7 +29,7 @@ function setup() {
   return { app, plugin, view, files, open, handlers, setActive: (file: TFile) => { active = file; } };
 }
 
-afterEach(() => { vi.useRealTimers(); document.body.replaceChildren(); });
+afterEach(() => { vi.useRealTimers(); document.body.replaceChildren(); Menu.instances = []; });
 
 describe('plugin integration in a simulated Obsidian host', () => {
   it('reuses the index and invalidates it for external modify/create/delete/rename events', async () => {
@@ -129,5 +129,58 @@ describe('plugin integration in a simulated Obsidian host', () => {
     const { view, app } = setup(); view.render();
     view.contentEl.querySelector('.rc-file')?.dispatchEvent(new MouseEvent('contextmenu', { bubbles: true }));
     expect(app.workspace.trigger).toHaveBeenCalledWith('file-menu', expect.anything(), expect.any(TFile), 'recent-changes');
+  });
+  it('excludes a file through its menu and restores it without altering the vault', async () => {
+    vi.useFakeTimers();
+    const { plugin, view, files, open } = setup();
+    const save = vi.spyOn(plugin, 'saveData');
+    files.push(new TFile('Other/one.md', Date.now()));
+    view.render();
+    view.contentEl.querySelector('[data-rc-path="Project/one.md"]')?.dispatchEvent(new MouseEvent('contextmenu', { bubbles: true }));
+    const action = Menu.instances.slice(-1)[0]?.items.find((item) => item.title === 'Exclude this file');
+    expect(action).toBeDefined(); await action?.action?.();
+    expect(view.contentEl.querySelector('[data-rc-path="Project/one.md"]')).toBeNull();
+    expect(view.contentEl.querySelector('[data-rc-path="Other/one.md"]')).not.toBeNull();
+    expect(files).toHaveLength(3); expect(open).not.toHaveBeenCalled();
+    expect(plugin.settings.exclude).toBe('node_modules/\n.venv/');
+    expect(save).toHaveBeenCalledWith(expect.objectContaining({ excludedItems: [{ kind: 'file', path: 'Project/one.md' }] }));
+    await plugin.excludeItem({ kind: 'file', path: 'Project/one.md' });
+    expect(plugin.settings.excludedItems).toHaveLength(1);
+    await plugin.removeExcludedItem({ kind: 'file', path: 'Project/one.md' });
+    expect(view.contentEl.querySelector('[data-rc-path="Project/one.md"]')).not.toBeNull();
+  });
+  it('excludes a folder from its keyboard menu and excludes the parent from a file menu', async () => {
+    vi.useFakeTimers();
+    const { plugin, view, files } = setup();
+    files.push(new TFile('Project/Sub/child.md', Date.now()));
+    plugin.settings.mode = 'folders'; view.render();
+    view.contentEl.querySelector('[data-rc-key="folder:Project"]')?.dispatchEvent(new KeyboardEvent('keydown', { key: 'F10', shiftKey: true, bubbles: true }));
+    const menu = Menu.instances.slice(-1)[0];
+    expect(menu?.showAtPosition).toHaveBeenCalled();
+    await menu?.items.find((item) => item.title === 'Exclude this folder')?.action?.();
+    expect(plugin.recentFiles().map((file) => file.path)).toEqual(['Other/two.md']);
+    await plugin.removeExcludedItem({ kind: 'folder', path: 'Project' });
+    view.contentEl.querySelector('[data-rc-path="Project/one.md"]')?.dispatchEvent(new MouseEvent('contextmenu', { bubbles: true }));
+    await Menu.instances.slice(-1)[0]?.items.find((item) => item.title === 'Exclude parent folder')?.action?.();
+    expect(plugin.recentFiles().map((file) => file.path)).toEqual(['Other/two.md']);
+  });
+  it('does not offer to exclude the whole vault from its root group', () => {
+    const { plugin, view, files } = setup();
+    files.splice(0, files.length, new TFile('root.md', Date.now()));
+    plugin.settings.mode = 'folders'; view.render();
+    view.contentEl.querySelector('.rc-folder')?.dispatchEvent(new MouseEvent('contextmenu', { bubbles: true }));
+    expect(Menu.instances).toHaveLength(0);
+    view.contentEl.querySelector('.rc-file')?.dispatchEvent(new MouseEvent('contextmenu', { bubbles: true }));
+    expect(Menu.instances.slice(-1)[0]?.items.map((item) => item.title)).not.toContain('Exclude parent folder');
+  });
+  it('restores the visible list when saving an exclusion fails', async () => {
+    vi.useFakeTimers();
+    const { plugin, view } = setup(); view.render();
+    vi.spyOn(plugin, 'saveData').mockRejectedValueOnce(new Error('disk full'));
+    await plugin.excludeItem({ kind: 'file', path: 'Project/one.md' });
+    expect(plugin.settings.excludedItems).toEqual([]);
+    expect(view.contentEl.querySelector('[data-rc-path="Project/one.md"]')).not.toBeNull();
+    await plugin.excludeItem({ kind: 'file', path: 'Project/one.md' });
+    expect(view.contentEl.querySelector('[data-rc-path="Project/one.md"]')).toBeNull();
   });
 });

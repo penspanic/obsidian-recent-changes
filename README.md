@@ -9,6 +9,7 @@ Pick a time range, switch between files and folders, and return to the work that
 - One-click ranges: 1 hour, 6 hours, 1 day, 3 days, 1 week, 30 days, or all files.
 - File view grouped by time, or folder view ordered by each folder's latest change.
 - Configurable extensions, excluded folders and filenames, and a display limit.
+- Right-click a file or folder to exclude it immediately; restore it from settings.
 - Relative modification times, active-file highlighting, and folder context for generic names such as `README` and `index`.
 - Open in the current pane, a new tab with Ctrl/Cmd-click, or a new tab with middle-click.
 - Keyboard navigation and native file context menus.
@@ -56,6 +57,17 @@ Choose **Files** to scan individual changes, or **Folders** to see which folders
 
 The count shows matching files before the display limit, for example `200 of 350`. Folder counts include only displayed files.
 
+### Exclude directly from the sidebar
+
+- Right-click a file → **Exclude this file** to hide only that exact file.
+- Right-click a file → **Exclude parent folder** to hide that folder and its descendants.
+- In folder view, right-click a folder → **Exclude this folder**.
+- **Shift+F10** opens these menus from a focused file or folder.
+
+These actions only hide entries in Recent Changes; the files remain in your vault. Matching uses the full vault path, so excluding `Project/notes.md` does not hide another `notes.md` elsewhere.
+
+To restore an item, open Settings → Recent Changes → **Excluded items** and select **Remove**. Existing manual rules under **Exclude** still apply.
+
 ### Keyboard
 
 - **Tab / Shift+Tab**: move between controls and entries.
@@ -63,7 +75,7 @@ The count shows matching files before the display limit, for example `200 of 350
 - **Enter / Space**: activate a focused button.
 - **Ctrl/Cmd+Enter** on a file: open in a new tab.
 - **← / →** on a folder: collapse / expand.
-- **Shift+F10** on a file: open the context menu.
+- **Shift+F10** on a file or non-root folder: open the context menu.
 
 ### Settings
 
@@ -73,6 +85,7 @@ The count shows matching files before the display limit, for example `200 of 350
 | Maximum files | 200 | Display at most 1–5,000 files. |
 | Extensions | `md, canvas, base` | Comma-separated extensions. Empty means all file types. |
 | Exclude | `node_modules/`, `.venv/` | One case-sensitive rule per line. |
+| Excluded items | Empty | Exact files/folders hidden through the sidebar menu; use Remove to restore. |
 
 A folder rule ends in `/` and matches at any depth: `Archive/` excludes both `Archive/a.md` and `Project/Archive/a.md`, but not `Archived/a.md`. A nested rule such as `Project/Generated/` matches that folder sequence. A rule without `/` at the end matches an exact filename anywhere in the vault: `README.md` excludes that name, not `MyREADME.md`. Exclusions are literal rules, not glob patterns or regular expressions.
 

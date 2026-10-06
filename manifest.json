@@ -1,7 +1,7 @@
 {
   "id": "recent-changes",
   "name": "Recent Changes",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "minAppVersion": "1.7.2",
   "description": "Browse recently modified files and folders in a compact sidebar with time filters.",
   "author": "penspanic",

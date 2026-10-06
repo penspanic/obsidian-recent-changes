@@ -1,6 +1,6 @@
-import { Plugin, TFile, debounce } from 'obsidian';
+import { Notice, Plugin, TFile, debounce } from 'obsidian';
 import { defaultSettings, filterAndSort, normalizeSettings, VIEW_TYPE } from './model';
-import type { FileEntry, RecentChangesSettings } from './model';
+import type { ExcludedItem, FileEntry, RecentChangesSettings } from './model';
 import { RecentChangesView } from './view';
 import { RecentChangesSettingsTab } from './settings';
 
@@ -71,6 +71,33 @@ export default class RecentChangesPlugin extends Plugin {
     const snapshot = normalizeSettings(this.settings);
     this.saving = this.saving.catch(() => undefined).then(() => this.saveData(snapshot));
     return this.saving;
+  }
+
+  async excludeItem(item: ExcludedItem): Promise<void> {
+    if (!item.path || this.settings.excludedItems.some((existing) => existing.kind === item.kind && existing.path === item.path)) return;
+    const previous = this.settings.excludedItems;
+    this.settings.excludedItems = [...this.settings.excludedItems, { ...item }];
+    if (!await this.persistExcludedItems(previous)) return;
+    new Notice('Excluded from recent changes. Restore it in settings → excluded items.');
+  }
+
+  async removeExcludedItem(item: ExcludedItem): Promise<void> {
+    const previous = this.settings.excludedItems;
+    this.settings.excludedItems = this.settings.excludedItems.filter((existing) => existing.kind !== item.kind || existing.path !== item.path);
+    await this.persistExcludedItems(previous);
+  }
+
+  private async persistExcludedItems(previous: ExcludedItem[]): Promise<boolean> {
+    let saved = true;
+    try { await this.saveSettings(); }
+    catch {
+      this.settings.excludedItems = previous;
+      saved = false;
+      new Notice('Could not save exclusions. Please try again.');
+    }
+    this.invalidate();
+    this.refreshViews();
+    return saved;
   }
 
   async activate(reveal: boolean): Promise<void> {
