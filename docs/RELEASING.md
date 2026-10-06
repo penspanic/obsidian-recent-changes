@@ -17,7 +17,7 @@ The workflow rejects a tag that does not match the manifest version. Release ass
 
 ## Community-directory submission
 
-GitHub publication and community-directory listing are separate steps. The [Recent Changes listing](https://community.obsidian.md/plugins/recent-changes) was submitted and published on 2026-10-06 under `penspanic`. The initial automated review was pending at publication; directory installation becomes available after the review requirements are satisfied.
+GitHub publication and community-directory listing are separate steps. The [Recent Changes listing](https://community.obsidian.md/plugins/recent-changes) was submitted and published on 2026-10-06 under `penspanic`. Its 0.3.1 review completed with a Satisfactory result and the Add to Obsidian link is available. Build verification reproduced the release JavaScript byte-for-byte; dependency, network, and obfuscation checks passed.
 
 For listing maintenance:
 

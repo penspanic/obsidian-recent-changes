@@ -16,13 +16,17 @@ Pick a time range, switch between files and folders, and return to the work that
 
 ## Installation
 
-Requires **desktop Obsidian 1.7.2 or newer**. The [community listing](https://community.obsidian.md/plugins/recent-changes) is published. Its initial automated review must finish before installation through the official directory becomes available. BRAT and manual installation work in the meantime.
+Requires **desktop Obsidian 1.7.2 or newer**. Install from the [official community listing](https://community.obsidian.md/plugins/recent-changes), through BRAT, or using the release files below.
 
 ### Obsidian community plugins
 
-Once the listing's **Add to Obsidian** button is available, use it to open the installer. You can also find **Recent Changes** in Settings → Community plugins → Browse, then install and enable it.
+1. Open Settings → Community plugins → Browse.
+2. Search for **Recent Changes**, then select **Install**.
+3. Enable the plugin and click the history ribbon icon or run **Recent Changes: Open view**.
 
-### BRAT (recommended)
+You can also use **Add to Obsidian** on the [community listing](https://community.obsidian.md/plugins/recent-changes) to open the installer directly.
+
+### BRAT
 
 1. Install and enable **BRAT** from Settings → Community plugins → Browse.
 2. Open the command palette and run **BRAT: Add a beta plugin for testing**.
