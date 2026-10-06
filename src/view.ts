@@ -143,6 +143,12 @@ export class RecentChangesView extends ItemView {
         if ((event.key === 'ArrowLeft' && !collapsed) || (event.key === 'ArrowRight' && collapsed)) {
           event.preventDefault(); void toggle();
         }
+        if (path && event.key === 'F10' && event.shiftKey) {
+          event.preventDefault(); this.folderMenu(path, heading);
+        }
+      });
+      if (path) heading.addEventListener('contextmenu', (event) => {
+        event.preventDefault(); this.folderMenu(path, heading, event);
       });
       if (!collapsed) for (const file of items) this.fileRow(list, file, false, now).addClass('rc-nested');
     }
@@ -183,8 +189,24 @@ export class RecentChangesView extends ItemView {
     const menu = new Menu();
     menu.addItem((item) => item.setTitle('Open in new tab').setIcon('file-plus')
       .onClick(() => this.plugin.openFile(entry.path, true)));
+    menu.addSeparator();
+    menu.addItem((item) => item.setTitle('Exclude this file').setIcon('eye-off')
+      .onClick(() => this.plugin.excludeItem({ kind: 'file', path: entry.path })));
+    if (entry.folder) menu.addItem((item) => item.setTitle('Exclude parent folder').setIcon('folder-minus')
+      .onClick(() => this.plugin.excludeItem({ kind: 'folder', path: entry.folder })));
     // Let Obsidian and other plugins supply their native file actions through the public event.
     this.app.workspace.trigger('file-menu', menu, file, VIEW_TYPE);
+    this.showMenu(menu, row, event);
+  }
+
+  private folderMenu(path: string, row: HTMLElement, event?: MouseEvent): void {
+    const menu = new Menu();
+    menu.addItem((item) => item.setTitle('Exclude this folder').setIcon('folder-minus')
+      .onClick(() => this.plugin.excludeItem({ kind: 'folder', path })));
+    this.showMenu(menu, row, event);
+  }
+
+  private showMenu(menu: Menu, row: HTMLElement, event?: MouseEvent): void {
     if (event) menu.showAtMouseEvent(event);
     else {
       const bounds = row.getBoundingClientRect();

@@ -6,6 +6,10 @@ export class RecentChangesSettingsTab extends PluginSettingTab {
   constructor(app: App, private readonly plugin: RecentChangesPlugin) { super(app, plugin); }
 
   override display(): void {
+    this.renderSettings();
+  }
+
+  private renderSettings(): void {
     const container = this.containerEl;
     const settings = this.plugin.settings;
     container.empty();
@@ -39,5 +43,15 @@ export class RecentChangesSettingsTab extends PluginSettingTab {
         text.inputEl.addClass('rc-exclude-input');
         text.setValue(settings.exclude).onChange(async (value) => { settings.exclude = value; await save(true); });
       });
+    new Setting(container).setName('Excluded items').setHeading()
+      .setDesc('Exact files and folders hidden from the sidebar menu. Remove an item to show it again; manual exclude rules still apply.');
+    for (const item of settings.excludedItems) {
+      new Setting(container).setName(item.path)
+        .setDesc(item.kind === 'folder' ? 'Folder and its descendants' : 'File')
+        .addButton((button) => button.setButtonText('Remove').onClick(async () => {
+          await this.plugin.removeExcludedItem(item);
+          this.renderSettings();
+        }));
+    }
   }
 }

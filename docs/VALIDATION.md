@@ -24,6 +24,18 @@ Tested on macOS with **Obsidian 1.13.7**:
 
 The owner subsequently reported that the plugin appeared to work. This is a desktop smoke test, not completion of the full matrix below.
 
+## Sidebar exclusions — 0.4.0
+
+Automated coverage now includes 35 tests, including exact-path exclusions, directory boundaries, duplicate filenames, settings migration, menu activation, restoration, and failed-save recovery.
+
+Tested in macOS Obsidian **1.14.4** on 2026-10-06 with synthetic files:
+
+- Right-click → Exclude this file hid the selected note while a same-named note in another folder remained visible.
+- Settings → Excluded items → Remove restored the note.
+- Right-click a folder → Exclude this folder hid its files and descendants while a sibling folder remained visible.
+- Removing the folder exclusion restored its files and descendants.
+- The original manual rules, view mode, range, file cap, extension filters, and collapsed folders remained unchanged. Test exclusions were removed and fixtures were moved out of the inbox after testing.
+
 ## Remaining coverage
 
 - [ ] Disable/re-enable the plugin and restore a saved sidebar across sessions.

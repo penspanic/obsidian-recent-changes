@@ -5,12 +5,17 @@ export const RANGES = [
 
 export const VIEW_TYPE = 'recent-changes';
 export type ViewMode = 'files' | 'folders';
+export interface ExcludedItem {
+  kind: 'file' | 'folder';
+  path: string;
+}
 export interface RecentChangesSettings {
   mode: ViewMode;
   hours: number;
   maxFiles: number;
   extensions: string;
   exclude: string;
+  excludedItems: ExcludedItem[];
   collapsed: Record<string, boolean>;
   openOnStartup: boolean;
 }
@@ -27,12 +32,23 @@ export function defaultSettings(): RecentChangesSettings {
   return {
     mode: 'files', hours: 168, maxFiles: 200,
     extensions: 'md, canvas, base', exclude: 'node_modules/\n.venv/',
-    collapsed: {}, openOnStartup: true,
+    excludedItems: [], collapsed: {}, openOnStartup: true,
   };
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null && !Array.isArray(value);
+}
+
+function normalizeExcludedItems(value: unknown): ExcludedItem[] {
+  if (!Array.isArray(value)) return [];
+  const unique = new Map<string, ExcludedItem>();
+  for (const item of value) {
+    if (!isRecord(item) || (item.kind !== 'file' && item.kind !== 'folder')
+      || typeof item.path !== 'string' || !item.path || item.path.startsWith('/') || item.path.endsWith('/')) continue;
+    unique.set(`${item.kind}:${item.path}`, { kind: item.kind, path: item.path });
+  }
+  return [...unique.values()];
 }
 
 export function normalizeSettings(value: unknown): RecentChangesSettings {
@@ -47,6 +63,7 @@ export function normalizeSettings(value: unknown): RecentChangesSettings {
       ? Math.max(1, Math.min(5000, Math.floor(value.maxFiles))) : defaults.maxFiles,
     extensions: typeof value.extensions === 'string' ? value.extensions : defaults.extensions,
     exclude: typeof value.exclude === 'string' ? value.exclude : defaults.exclude,
+    excludedItems: normalizeExcludedItems(value.excludedItems),
     collapsed: isRecord(value.collapsed)
       ? Object.fromEntries(Object.entries(value.collapsed).filter(([, collapsed]) => collapsed === true).map(([path]) => [path, true]))
       : {},
@@ -63,6 +80,8 @@ export function filterAndSort(files: readonly FileEntry[], settings: RecentChang
     if (!Number.isFinite(file.mtime)) return false;
     if (extensions.size && !extensions.has(file.extension.toLowerCase())) return false;
     if (names.has(file.name)) return false;
+    if (settings.excludedItems.some((item) => item.kind === 'file'
+      ? file.path === item.path : file.path.startsWith(item.path + '/'))) return false;
     return !directories.some((directory) => ('/' + file.path).includes('/' + directory));
   }).sort((a, b) => b.mtime - a.mtime || a.path.localeCompare(b.path));
 }

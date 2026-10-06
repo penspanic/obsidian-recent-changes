@@ -64,6 +64,24 @@ describe('file filtering', () => {
   it('skips invalid timestamps', () => {
     expect(filterAndSort([entry('bad.md', NaN), entry('ok.md', 1)], defaultSettings())).toHaveLength(1);
   });
+  it('excludes only the selected file, including literal unusual characters', () => {
+    const settings = { ...defaultSettings(), excludedItems: [{ kind: 'file' as const, path: 'A/[한글]\n note.md' }] };
+    const files = [entry('A/[한글]\n note.md', 1), entry('B/[한글]\n note.md', 1)];
+    expect(filterAndSort(files, settings).map((file) => file.path)).toEqual(['B/[한글]\n note.md']);
+  });
+  it('excludes a selected folder and descendants without matching other paths', () => {
+    const settings = { ...defaultSettings(), excludedItems: [{ kind: 'folder' as const, path: 'A/Notes' }] };
+    const paths = ['A/Notes/a.md', 'A/Notes/Sub/b.md', 'B/Notes/a.md', 'A/Notes-Other/a.md', 'Team/A/Notes/a.md'];
+    expect(filterAndSort(paths.map((path) => entry(path, 1)), settings).map((file) => file.path)).toEqual(['A/Notes-Other/a.md', 'B/Notes/a.md', 'Team/A/Notes/a.md']);
+  });
+  it('validates, deduplicates, and copies stored exact exclusions', () => {
+    const stored = { excludedItems: [null, 'broken', { kind: 'folder', path: '' }, { kind: 'other', path: 'A' }, { kind: 'file', path: 'A/note.md' }, { kind: 'file', path: 'A/note.md' }] };
+    const settings = normalizeSettings(stored);
+    expect(settings.excludedItems).toEqual([{ kind: 'file', path: 'A/note.md' }]);
+    const item = settings.excludedItems[0]; if (item) item.path = 'changed.md';
+    expect(normalizeSettings(stored).excludedItems[0]?.path).toBe('A/note.md');
+    expect(normalizeSettings({ exclude: 'Archive/' }).excludedItems).toEqual([]);
+  });
 });
 
 describe('range and grouping', () => {
